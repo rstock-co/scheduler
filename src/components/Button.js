@@ -2,19 +2,15 @@ import React from "react";
 import classNames from "classnames";
 import "./Button.scss";
 
-const Button = props => {
+const Button = ({ confirm, danger, disabled, onClick, children }) => {
   const buttonClass = classNames("button", {
-    "button--confirm": props.confirm,
-    "button--danger": props.danger,
+    "button--confirm": confirm,
+    "button--danger": danger,
   });
 
   return (
-    <button
-      className={buttonClass}
-      onClick={props.onClick}
-      disabled={props.disabled}
-    >
-      {props.children}
+    <button className={buttonClass} onClick={onClick} disabled={disabled}>
+      {children}
     </button>
   );
 };
