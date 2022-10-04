@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, InterviewerList } from "components";
 import "./styles.scss";
 
-const Form = ({ student, interviewers, interviewer, onSave, onCancel }) => {
+const Form = ({ interviewers, onSave, onCancel, ...props }) => {
+  const [student, setStudent] = useState(props.student || "");
+  const [interviewer, setInterviewer] = useState(props.interviewer || null);
+
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -13,9 +16,14 @@ const Form = ({ student, interviewers, interviewer, onSave, onCancel }) => {
             type="text"
             placeholder="Enter Student Name"
             value={student}
+            onChange={event => setStudent(event.target.value)}
           />
         </form>
-        <InterviewerList interviewers={interviewers} value={interviewer} />
+        <InterviewerList
+          interviewers={interviewers}
+          value={interviewer}
+          onChange={setInterviewer}
+        />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
