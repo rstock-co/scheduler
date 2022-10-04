@@ -3,10 +3,11 @@ import classNames from "classnames";
 import "./InterviewerListItem.scss";
 
 const InterviewerListItem = ({
-  selected,
   id,
   name,
   avatar,
+  selected,
+  interviewer,
   setInterviewer,
 }) => {
   const interviewerClass = classNames("interviewers__item", {
