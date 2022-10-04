@@ -14,6 +14,7 @@ import {
   Appointment,
   Header,
   Empty,
+  Show,
 } from "../src/components";
 
 storiesOf("Button", module)
@@ -138,4 +139,12 @@ storiesOf("Appointment", module)
   .add("Appointment", () => <Appointment />)
   .add("Appointment with Time", () => <Appointment time="12pm" />)
   .add("Header", () => <Header time="12pm" />)
-  .add("Empty", () => <Empty onAdd={action("onAdd")} />);
+  .add("Empty", () => <Empty onAdd={action("onAdd")} />)
+  .add("Show", () => (
+    <Show
+      student={"Lydia Miller-Jones"}
+      interviewer={"Sylvia Palmer"}
+      onEdit={action("onEdit")}
+      onDelete={action("onDelete")}
+    />
+  ));

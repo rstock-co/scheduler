@@ -8,3 +8,4 @@ export { default as InterviewerList } from "./InterviewerList";
 export { default as Appointment } from "./Appointment";
 export { default as Header } from "./Appointment/Header";
 export { default as Empty } from "./Appointment/Empty";
+export { default as Show } from "./Appointment/Show";
