@@ -15,6 +15,7 @@ import {
   Header,
   Empty,
   Show,
+  Confirm,
 } from "../src/components";
 
 storiesOf("Button", module)
@@ -146,5 +147,12 @@ storiesOf("Appointment", module)
       interviewer={"Sylvia Palmer"}
       onEdit={action("onEdit")}
       onDelete={action("onDelete")}
+    />
+  ))
+  .add("Confirm", () => (
+    <Confirm
+      message={"Delete the appointment?"}
+      onConfirm={action("onConfirm")}
+      onCancel={action("onCancel")}
     />
   ));

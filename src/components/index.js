@@ -9,3 +9,4 @@ export { default as Appointment } from "./Appointment";
 export { default as Header } from "./Appointment/Header";
 export { default as Empty } from "./Appointment/Empty";
 export { default as Show } from "./Appointment/Show";
+export { default as Confirm } from "./Appointment/Confirm";
