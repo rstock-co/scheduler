@@ -35,7 +35,7 @@ const Application = () => {
           />
           <hr className="sidebar__separator sidebar--centered" />
           <nav className="sidebar__menu">
-            <DayList days={days} day={day} setDay={setDay} />
+            <DayList days={days} value={day} onChange={setDay} />
           </nav>
           <img
             className="sidebar__lhl sidebar--centered"
@@ -44,7 +44,7 @@ const Application = () => {
           />
         </section>
         <section className="schedule">
-          {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+          {/* Replace this with the schedule elements during the "The Scheduler" activity. */}
         </section>
       </main>
     </>
