@@ -12,3 +12,4 @@ export { default as Show } from "./Appointment/Show";
 export { default as Confirm } from "./Appointment/Confirm";
 export { default as Status } from "./Appointment/Status";
 export { default as Error } from "./Appointment/Error";
+export { default as Form } from "./Appointment/Form";
