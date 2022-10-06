@@ -5,12 +5,12 @@ import Empty from "./Empty";
 
 import "./styles.scss";
 
-const Appointment = props => {
+const Appointment = ({ time, interview, ...rest }) => {
   return (
     <article className="appointment">
-      <Header time={props.time} />
-      {props.interview && <Show {...props.interview} />}
-      {!props.interview && <Empty {...props} />}
+      <Header time={time} />
+      {interview && <Show {...interview} />}
+      {!interview && <Empty {...rest} />}
     </article>
   );
 };
