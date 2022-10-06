@@ -31,7 +31,7 @@ const Application = () => {
   }, []);
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-
+  console.log("daily appts: ", dailyAppointments);
   return (
     <>
       <main className="layout">
@@ -55,6 +55,7 @@ const Application = () => {
           {dailyAppointments.map(appointment => (
             <Appointment key={appointment.id} {...appointment} />
           ))}
+          <Appointment key="last" time="5pm" />
         </section>
       </main>
     </>
