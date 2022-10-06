@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DayList, Appointment } from "../components";
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 import axios from "axios";
 
 import "./Application.scss";
@@ -30,8 +30,21 @@ const Application = () => {
     });
   }, []);
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log("daily appts: ", dailyAppointments);
+  const appointments = getAppointmentsForDay(state, state.day);
+
+  const schedule = appointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
+    );
+  });
+
   return (
     <>
       <main className="layout">
@@ -52,9 +65,7 @@ const Application = () => {
           />
         </section>
         <section className="schedule">
-          {dailyAppointments.map(appointment => (
-            <Appointment key={appointment.id} {...appointment} />
-          ))}
+          {schedule}
           <Appointment key="last" time="5pm" />
         </section>
       </main>
