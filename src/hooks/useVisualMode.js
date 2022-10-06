@@ -4,8 +4,15 @@ const useVisualMode = initial => {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
 
-  const transition = newMode => {
-    setHistory(prev => [...prev, newMode]);
+  // replace the current mode in the history with a new one by passing
+  // an optional argument to the transition() function.
+  const transition = (newMode, replace = false) => {
+    replace
+      ? setHistory(prev => {
+          prev[prev.length - 1] = newMode;
+          return prev;
+        })
+      : setHistory(prev => [...prev, newMode]);
     setMode(prev => newMode);
   };
 
