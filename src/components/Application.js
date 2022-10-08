@@ -1,7 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { DayList, Appointment } from "../components";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getInterview,
+} from "helpers/selectors";
 
 import "./Application.scss";
 
@@ -30,7 +34,22 @@ const Application = () => {
     });
   }, []);
 
+  // if (state.days.length > 1) console.log("First render state: ", state);
+
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    setState(prev => ({ ...prev, appointments }));
+  };
+
   const appointments = getAppointmentsForDay(state, state.day);
+  const interviewers = getInterviewersForDay(state, state.day);
 
   const schedule = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
@@ -41,6 +60,8 @@ const Application = () => {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     );
   });
