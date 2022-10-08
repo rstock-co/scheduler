@@ -4,7 +4,6 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import useVisualMode from "hooks/useVisualMode";
-import { getInterviewersForDay } from "helpers/selectors";
 
 import "./styles.scss";
 
@@ -21,8 +20,9 @@ const Appointment = ({ id, time, interview, interviewers, bookInterview }) => {
       student: name,
       interviewer,
     };
-    bookInterview(id, interview);
-    transition(SHOW);
+    bookInterview(id, interview).then(() => {
+      transition(SHOW);
+    });
   };
 
   return (

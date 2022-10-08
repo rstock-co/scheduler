@@ -45,7 +45,11 @@ const Application = () => {
       ...state.appointments,
       [id]: appointment,
     };
-    setState(prev => ({ ...prev, appointments }));
+    return axios
+      .put(`http://localhost:8001/api/appointments/${id}`, { interview })
+      .then(() => {
+        setState(prev => ({ ...prev, appointments }));
+      });
   };
 
   const appointments = getAppointmentsForDay(state, state.day);
