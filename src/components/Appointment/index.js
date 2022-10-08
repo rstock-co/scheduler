@@ -3,6 +3,7 @@ import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
+import Status from "./Status";
 import useVisualMode from "hooks/useVisualMode";
 
 import "./styles.scss";
@@ -10,6 +11,7 @@ import "./styles.scss";
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const SAVING = "SAVING";
 
 const Appointment = ({ id, time, interview, interviewers, bookInterview }) => {
   const initial = interview ? SHOW : EMPTY;
@@ -20,6 +22,7 @@ const Appointment = ({ id, time, interview, interviewers, bookInterview }) => {
       student: name,
       interviewer,
     };
+    transition(SAVING);
     bookInterview(id, interview).then(() => {
       transition(SHOW);
     });
@@ -33,6 +36,7 @@ const Appointment = ({ id, time, interview, interviewers, bookInterview }) => {
       {mode === CREATE && (
         <Form interviewers={interviewers} onCancel={back} onSave={save} />
       )}
+      {mode === SAVING && <Status message={"Saving"} />}
     </article>
   );
 };
