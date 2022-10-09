@@ -34,7 +34,7 @@ const Application = () => {
     });
   }, []);
 
-  // if (state.days.length > 1) console.log("First render state: ", state);
+  if (state.days.length > 1) console.log("Initial state: ", state);
 
   const bookInterview = (id, interview) => {
     const appointment = {
@@ -45,9 +45,31 @@ const Application = () => {
       ...state.appointments,
       [id]: appointment,
     };
+    console.log("State before booking: ", state.appointments[id]);
+    console.log("Interview before booking: ", { interview });
     return axios
       .put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
+        setState(prev => ({ ...prev, appointments }));
+      });
+  };
+
+  const cancelInterview = id => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    return axios
+      .delete(`http://localhost:8001/api/appointments/${id}`, {
+        interview: appointment,
+      })
+      .then(() => {
+        console.log("Cancelled!!!");
         setState(prev => ({ ...prev, appointments }));
       });
   };
@@ -66,6 +88,7 @@ const Application = () => {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
