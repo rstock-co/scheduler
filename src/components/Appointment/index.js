@@ -92,7 +92,7 @@ const Appointment = ({
           interviewers={interviewers}
           onCancel={back}
           onSave={save}
-          name={interview.student}
+          studentName={interview.student}
           interviewerID={interview.interviewer.id}
         />
       )}

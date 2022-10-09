@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { Button, InterviewerList } from "components";
 import "./styles.scss";
 
-const Form = ({ interviewers, onSave, onCancel, name, interviewerID }) => {
-  const [student, setStudent] = useState(name || "");
+const Form = ({
+  interviewers,
+  onSave,
+  onCancel,
+  studentName,
+  interviewerID,
+}) => {
+  const [student, setStudent] = useState(studentName || "");
   const [interviewer, setInterviewer] = useState(interviewerID || null);
 
   console.log("Student: ", student);
