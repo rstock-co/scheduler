@@ -5,6 +5,7 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 import useVisualMode from "hooks/useVisualMode";
 
 import "./styles.scss";
@@ -16,6 +17,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 const Appointment = ({
   id,
@@ -34,17 +37,25 @@ const Appointment = ({
       interviewer,
     };
     transition(SAVING);
-    bookInterview(id, interview).then(() => {
-      transition(SHOW);
-    });
+    bookInterview(id, interview)
+      .then(() => {
+        transition(SHOW);
+      })
+      .catch(() => {
+        transition(ERROR_SAVE, true);
+      });
   };
 
   const deleted = id => {
     transition(CONFIRM, true);
     transition(DELETING, true);
-    cancelInterview(id).then(() => {
-      transition(EMPTY);
-    });
+    cancelInterview(id)
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch(() => {
+        transition(ERROR_DELETE, true);
+      });
   };
 
   return (
@@ -78,11 +89,30 @@ const Appointment = ({
       )}
       {mode === EDIT && (
         <Form
-          id={id}
           interviewers={interviewers}
           onCancel={back}
           onSave={save}
-          {...interview}
+          name={interview.student}
+          interviewerID={interview.interviewer.id}
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          message={"Error Delete"}
+          onClose={() => {
+            back();
+            back();
+          }}
+        />
+      )}
+
+      {mode === ERROR_SAVE && (
+        <Error
+          message={"Error Save"}
+          onClose={() => {
+            back();
+            back();
+          }}
         />
       )}
     </article>
