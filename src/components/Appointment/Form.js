@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Button, InterviewerList } from "components";
 import "./styles.scss";
 
-const Form = ({ id, interviewers, onSave, onCancel, ...rest }) => {
-  const [student, setStudent] = useState(rest.student || "");
-  const [interviewer, setInterviewer] = useState(rest.interviewer || null);
+const Form = ({ id, interviewers, onSave, onCancel, ...interview }) => {
+  const [student, setStudent] = useState(interview.student || "");
+  const [interviewer, setInterviewer] = useState(
+    interview.interviewer.id || null
+  );
 
   const reset = () => {
     setStudent("");

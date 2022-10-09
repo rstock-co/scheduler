@@ -76,6 +76,15 @@ const Appointment = ({
           onCancel={() => transition(SHOW)}
         />
       )}
+      {mode === EDIT && (
+        <Form
+          id={id}
+          interviewers={interviewers}
+          onCancel={back}
+          onSave={save}
+          {...interview}
+        />
+      )}
     </article>
   );
 };
