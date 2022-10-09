@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, InterviewerList } from "components";
 import "./styles.scss";
 
-const Form = ({ interviewers, onSave, onCancel, ...rest }) => {
+const Form = ({ id, interviewers, onSave, onCancel, ...rest }) => {
   const [student, setStudent] = useState(rest.student || "");
   const [interviewer, setInterviewer] = useState(rest.interviewer || null);
 
@@ -13,7 +13,7 @@ const Form = ({ interviewers, onSave, onCancel, ...rest }) => {
 
   const cancel = () => {
     reset();
-    onCancel();
+    onCancel(id);
   };
 
   return (
@@ -37,7 +37,7 @@ const Form = ({ interviewers, onSave, onCancel, ...rest }) => {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={cancel}>
+          <Button danger onClick={onCancel}>
             Cancel
           </Button>
           <Button confirm onClick={() => onSave(student, interviewer)}>
