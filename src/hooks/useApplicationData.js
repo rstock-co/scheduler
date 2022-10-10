@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import updateSpots from "helpers/updaters";
 import axios from "axios";
 
 const useApplicationData = () => {
@@ -9,7 +10,7 @@ const useApplicationData = () => {
     interviewers: {},
   });
 
-  const setDay = day => setState({ ...state, day });
+  const setDay = day => setState(prev => ({ ...prev, day }));
 
   useEffect(() => {
     Promise.all([
@@ -26,7 +27,18 @@ const useApplicationData = () => {
     });
   }, []);
 
-  if (state.days.length > 1) console.log("Initial state: ", state);
+  if (state.days.length > 1) {
+    console.log("Initial State: ", state);
+  }
+
+  const updateSpots = id => {
+    axios
+      .get("http://localhost:8001/api/days")
+      .then(response => {
+        setState(prev => ({ ...prev, days: response.data }));
+      })
+      .catch(error => console.log(error));
+  };
 
   const bookInterview = (id, interview) => {
     const appointment = {
@@ -37,12 +49,14 @@ const useApplicationData = () => {
       ...state.appointments,
       [id]: appointment,
     };
-    console.log("State before booking: ", state.appointments[id]);
-    console.log("Interview before booking: ", { interview });
+
     return axios
       .put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
         setState(prev => ({ ...prev, appointments }));
+      })
+      .then(() => {
+        updateSpots(id);
       });
   };
 
@@ -61,8 +75,10 @@ const useApplicationData = () => {
         interview: appointment,
       })
       .then(() => {
-        console.log("Cancelled!!!");
         setState(prev => ({ ...prev, appointments }));
+      })
+      .then(() => {
+        updateSpots(id);
       });
   };
 
