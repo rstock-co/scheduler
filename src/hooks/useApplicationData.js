@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 
 const SET_DAY = "SET_DAY";
@@ -7,10 +7,10 @@ const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
 
 /**
- * The reducer function for the 'useReducer' hook that specifies how the state gets updated
+ * The reducer function from the 'useReducer' hook, specifies the actions (functions to execute) to update the state object
  * @param {object} state The application's current state
- * @param {object} action The action performed by the user.
- * @returns the next state, via a function execution.  Returns error message if action type is not valid.
+ * @param {object} action The action performed by the user
+ * @returns the next state, OR returns an error message if the given action type isn't valid
  */
 
 const reducer = (state, action) => {
@@ -27,15 +27,18 @@ const reducer = (state, action) => {
     default: () =>
       console.log(`Error: the ${action.type} action type is not valid`),
   };
+
   return reducers[action.type](state) || reducers.default();
 };
 
 /**
- * Custom 'useApplicationData' hook to manage the application's state
+ * Custom hook 'useApplicationData': manages the application's state
  */
 
 const useApplicationData = () => {
-  // set and manage state with useReducer hook
+  /**
+   * Set useReducer hook with initial state
+   */
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -43,10 +46,14 @@ const useApplicationData = () => {
     interviewers: {},
   });
 
-  console.log("STATE:", state);
+  /**
+   * Make a connection to the WebSocket server
+   */
+
+  useEffect(() => {}, []);
 
   /**
-   * Initialize application data via useEffect hook which runs only once, making calls to 3 different api's
+   * Initializes application data via useEffect hook which runs only once, making calls to 3 different api's
    * Then dispatches the data to update the application state via useReducer hook
    */
 
@@ -66,7 +73,9 @@ const useApplicationData = () => {
   }, []);
 
   /**
-   * Helper function to update the state by setting the number of spots for a given day
+   * Helper functions: update the state object via dispatch (useReducer hook)
+   * (1) setDay: updates the day when user clicks on DayListItem
+   * (2) updateSpots: updates the number of spots for a given day when a user books or cancels an interview
    */
 
   const setDay = day => dispatch({ type: SET_DAY, day });
@@ -81,7 +90,7 @@ const useApplicationData = () => {
   };
 
   /**
-   * Books an interview upon user submitting the form
+   * Books an interview when user submits the form
    * @param {integer} id the appointment id for the appointment being booked
    * @param {object} interview the interview data
    * @returns an axios put call to update appointments with new interview, then update state, then update spots
@@ -111,7 +120,7 @@ const useApplicationData = () => {
   };
 
   /**
-   * Cancels an interview upon user clicking the cancel button
+   * Cancels an interview when the user clicks the cancel button
    * @param {integer} id the appointment id for the appointment being cancelled
    * @returns an axios delete call to delete the selected interview, then update state, then update spots
    */
