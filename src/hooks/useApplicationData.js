@@ -140,13 +140,14 @@ const useApplicationData = () => {
         dispatch({
           type: SET_INTERVIEW,
           appointments,
-        })
-      }).then(() => {
-      dispatch({
-        type: SET_DAYS,
-        days: updateSpots(state, appointments),
-      
-    })
+        });
+      })
+      .then(() => {
+        dispatch({
+          type: SET_DAYS,
+          days: updateSpots(state, appointments),
+        });
+      });
   };
 
   return {

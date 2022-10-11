@@ -1,5 +1,4 @@
 import updateSpots from "helpers/updaters";
-const { assert } = require("chai");
 
 describe("Update Spots Tests for bookInterview (create)", function () {
   const oldState = require("./testState.json");
@@ -15,14 +14,14 @@ describe("Update Spots Tests for bookInterview (create)", function () {
   const days = updateSpots(state, appointments, id);
 
   it("should update spots to 1 ", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 1);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(1);
   });
 
   it("should update spots and not change original days array", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 1);
-    assert.deepEqual(state.days, oldState.days);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(1);
+    expect(state.days).toEqual(oldState.days);
   });
 });
 
@@ -40,14 +39,14 @@ describe("Update Spots Tests for bookInterview (update)", function () {
   const days = updateSpots(state, appointments, id);
 
   it("should keep spots at 2 ", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 2);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(2);
   });
 
   it("should update spots and not change original days array", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 2);
-    assert.deepEqual(state.days, oldState.days);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(2);
+    expect(state.days).toEqual(oldState.days);
   });
 });
 
@@ -62,13 +61,13 @@ describe("Update Spots Tests for cancelInterview (delete)", function () {
   const days = updateSpots(state, appointments, id);
 
   it("should update spots to 3 ", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 3);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(3);
   });
 
   it("should update spots and not change original days array", function () {
-    assert.isDefined(days[0]);
-    assert.equal(days[0].spots, 3);
-    assert.deepEqual(state.days, oldState.days);
+    expect(days[0]).toBeDefined();
+    expect(days[0].spots).toEqual(3);
+    expect(state.days).toEqual(oldState.days);
   });
 });
