@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useCallback } from "react";
 import axios from "axios";
 import updateSpots from "helpers/updaters";
 
@@ -48,27 +48,30 @@ const useApplicationData = () => {
   });
 
   /**
-   * Helper function to update appointments list with the new interview object
-   * Triggered by the server message from web socket when either
-   * the bookInterview or cancelInterview functions make an AJAX request
+   * Updates state (appointments list) with the new interview object
+   * when either the bookInterview or cancelInterview functions make an AJAX request
+   * Triggered by web socket (server message)
    */
 
-  const updateAppointments = (id, interview) => {
-    const int = interview ? { ...interview } : null;
-    const appointment = {
-      ...state.appointments[id],
-      interview: int,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    dispatch({
-      type: SET_INTERVIEW,
-      appointments,
-      days: updateSpots(state, appointments),
-    });
-  };
+  const updateAppointments = useCallback(
+    (id, interview) => {
+      const int = interview ? { ...interview } : null;
+      const appointment = {
+        ...state.appointments[id],
+        interview: int,
+      };
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment,
+      };
+      dispatch({
+        type: SET_INTERVIEW,
+        appointments,
+        days: updateSpots(state, appointments),
+      });
+    },
+    [state]
+  );
 
   /**
    * Initializes application data via useEffect hook which runs only once, making calls to 3 different api's
@@ -92,40 +95,37 @@ const useApplicationData = () => {
 
   /**
    * Web Socket Implementation
+   * Initializes a new web socket, and an event listener
+   * When a message is recieved from server after db update,
+   * calls the updateAppointments function to update state
    */
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8001");
+    const socket = new WebSocket("ws://localhost:8001"); // add environment variable
     socket.onmessage = event => {
-      const serverMsg = JSON.parse(event.data);
-      if (serverMsg.type === "SET_INTERVIEW") {
-        updateAppointments(serverMsg.id, serverMsg.interview);
+      const data = JSON.parse(event.data);
+      if (data.type === "SET_INTERVIEW") {
+        updateAppointments(data.id, data.interview);
       }
     };
     return () => socket.close();
-  }, [state]);
+  }, [updateAppointments]);
 
   /**
-   * Updates the day when user clicks on DayListItem component in sidebar
+   * Updates the day when user clicks on DayListItem
    */
 
   const setDay = day => dispatch({ type: SET_DAY, day });
 
   /**
-   * Books an interview when user submits the form
-   * @param {integer} id the appointment id for the appointment being booked
+   * Books or cancels an interview when user submits the form or clicks garbage icon
+   * @param {integer} id the appointment id for the appointment being booked or cancelled
    * @param {object} interview the interview data
-   * @returns an axios put call to update appointments with new interview, then update state, then update spots
+   * @returns an axios call to update appointments via put or delete call
    */
 
   const bookInterview = (id, interview) =>
     axios.put(`/api/appointments/${id}`, { interview });
-
-  /**
-   * Cancels an interview when the user clicks the cancel button
-   * @param {integer} id the appointment id for the appointment being cancelled
-   * @returns an axios delete call to delete the selected interview, then update state, then update spots
-   */
 
   const cancelInterview = id => axios.delete(`/api/appointments/${id}`);
 
@@ -136,5 +136,4 @@ const useApplicationData = () => {
     cancelInterview,
   };
 };
-
 export default useApplicationData;
