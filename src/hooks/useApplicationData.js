@@ -1,11 +1,6 @@
-import React, { useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import axios from "axios";
 import updateSpots from "helpers/updaters";
-
-const SET_DAY = "SET_DAY";
-const SET_DAYS = "SET_DAYS";
-const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-const SET_INTERVIEW = "SET_INTERVIEW";
 
 /**
  * The reducer function from the 'useReducer' hook, specifies the actions (functions to execute) to update the state object
@@ -14,17 +9,24 @@ const SET_INTERVIEW = "SET_INTERVIEW";
  * @returns the next state, OR returns an error message if the given action type isn't valid
  */
 
+const SET_DAY = "SET_DAY";
+const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+const SET_INTERVIEW = "SET_INTERVIEW";
+
 const reducer = (state, action) => {
   const reducers = {
     SET_DAY: state => ({ ...state, day: action.day }),
-    SET_DAYS: state => ({ ...state, days: action.days }),
     SET_APPLICATION_DATA: state => ({
       ...state,
       days: action.days,
       appointments: action.appointments,
       interviewers: action.interviewers,
     }),
-    SET_INTERVIEW: state => ({ ...state, appointments: action.appointments }),
+    SET_INTERVIEW: state => ({
+      ...state,
+      appointments: action.appointments,
+      days: action.days,
+    }),
     default: () =>
       console.log(`Error: the ${action.type} action type is not valid`),
   };
@@ -33,13 +35,11 @@ const reducer = (state, action) => {
 };
 
 /**
- * Custom hook 'useApplicationData': manages the application's state
+ * useApplicationData (custom React hook)
+ * @returns object containing state, setDay, bookInterview, cancelInterview
  */
 
 const useApplicationData = () => {
-  /**
-   * Set useReducer hook with initial state
-   */
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -48,10 +48,27 @@ const useApplicationData = () => {
   });
 
   /**
-   * Make a connection to the WebSocket server
+   * Helper function to update appointments list with the new interview object
+   * Triggered by the server message from web socket when either
+   * the bookInterview or cancelInterview functions make an AJAX request
    */
 
-  useEffect(() => {}, []);
+  const updateAppointments = (id, interview) => {
+    const int = interview ? { ...interview } : null;
+    const appointment = {
+      ...state.appointments[id],
+      interview: int,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    dispatch({
+      type: SET_INTERVIEW,
+      appointments,
+      days: updateSpots(state, appointments),
+    });
+  };
 
   /**
    * Initializes application data via useEffect hook which runs only once, making calls to 3 different api's
@@ -73,12 +90,23 @@ const useApplicationData = () => {
     });
   }, []);
 
-  if (state.days.length > 0) console.log("Initial state: ", state);
+  /**
+   * Web Socket Implementation
+   */
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8001");
+    socket.onmessage = event => {
+      const serverMsg = JSON.parse(event.data);
+      if (serverMsg.type === "SET_INTERVIEW") {
+        updateAppointments(serverMsg.id, serverMsg.interview);
+      }
+    };
+    return () => socket.close();
+  }, [state]);
 
   /**
-   * Helper functions: update the state object via dispatch (useReducer hook)
-   * (1) setDay: updates the day when user clicks on DayListItem
-   * (2) updateSpots: updates the number of spots for a given day when a user books or cancels an interview
+   * Updates the day when user clicks on DayListItem component in sidebar
    */
 
   const setDay = day => dispatch({ type: SET_DAY, day });
@@ -90,31 +118,8 @@ const useApplicationData = () => {
    * @returns an axios put call to update appointments with new interview, then update state, then update spots
    */
 
-  const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    return axios
-      .put(`/api/appointments/${id}`, { interview })
-      .then(() => {
-        dispatch({
-          type: SET_INTERVIEW,
-          appointments,
-        });
-      })
-      .then(() => {
-        dispatch({
-          type: SET_DAYS,
-          days: updateSpots(state, appointments),
-        });
-      });
-  };
+  const bookInterview = (id, interview) =>
+    axios.put(`/api/appointments/${id}`, { interview });
 
   /**
    * Cancels an interview when the user clicks the cancel button
@@ -122,33 +127,7 @@ const useApplicationData = () => {
    * @returns an axios delete call to delete the selected interview, then update state, then update spots
    */
 
-  const cancelInterview = id => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    return axios
-      .delete(`/api/appointments/${id}`, {
-        interview: appointment,
-      })
-      .then(() => {
-        dispatch({
-          type: SET_INTERVIEW,
-          appointments,
-        });
-      })
-      .then(() => {
-        dispatch({
-          type: SET_DAYS,
-          days: updateSpots(state, appointments),
-        });
-      });
-  };
+  const cancelInterview = id => axios.delete(`/api/appointments/${id}`);
 
   return {
     state,

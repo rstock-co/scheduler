@@ -12,9 +12,6 @@ const Form = ({
   const [student, setStudent] = useState(studentName || "");
   const [interviewer, setInterviewer] = useState(interviewerID || null);
 
-  console.log("Student: ", student);
-  console.log("Interviewer: ", interviewer);
-
   const reset = () => {
     setStudent("");
     setInterviewer(null);
