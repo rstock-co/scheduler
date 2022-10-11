@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
+import updateSpots from "helpers/updaters";
 
 const SET_DAY = "SET_DAY";
 const SET_DAYS = "SET_DAYS";
@@ -72,6 +73,8 @@ const useApplicationData = () => {
     });
   }, []);
 
+  if (state.days.length > 0) console.log("Initial state: ", state);
+
   /**
    * Helper functions: update the state object via dispatch (useReducer hook)
    * (1) setDay: updates the day when user clicks on DayListItem
@@ -79,15 +82,6 @@ const useApplicationData = () => {
    */
 
   const setDay = day => dispatch({ type: SET_DAY, day });
-
-  const updateSpots = id => {
-    axios
-      .get("/api/days")
-      .then(response => {
-        dispatch({ type: SET_DAYS, days: response.data });
-      })
-      .catch(error => console.log(error));
-  };
 
   /**
    * Books an interview when user submits the form
@@ -115,7 +109,10 @@ const useApplicationData = () => {
         });
       })
       .then(() => {
-        updateSpots(id);
+        dispatch({
+          type: SET_DAYS,
+          days: updateSpots(state, appointments),
+        });
       });
   };
 
@@ -143,11 +140,13 @@ const useApplicationData = () => {
         dispatch({
           type: SET_INTERVIEW,
           appointments,
-        });
-      })
-      .then(() => {
-        updateSpots(id);
-      });
+        })
+      }).then(() => {
+      dispatch({
+        type: SET_DAYS,
+        days: updateSpots(state, appointments),
+      
+    })
   };
 
   return {
