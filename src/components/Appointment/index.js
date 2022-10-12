@@ -98,7 +98,7 @@ const Appointment = ({
       )}
       {mode === ERROR_DELETE && (
         <Error
-          message={"Error Delete"}
+          message={"Error Deleting"}
           onClose={() => {
             back();
             back();
@@ -108,7 +108,7 @@ const Appointment = ({
 
       {mode === ERROR_SAVE && (
         <Error
-          message={"Error Save"}
+          message={"Error Saving"}
           onClose={() => {
             back();
             back();
