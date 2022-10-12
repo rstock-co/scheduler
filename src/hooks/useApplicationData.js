@@ -3,31 +3,17 @@ import axios from "axios";
 import updateSpots from "helpers/updaters";
 import reducer, {
   SET_DAY,
-  SET_DAYS,
   SET_APPLICATION_DATA,
   SET_INTERVIEW,
 } from "reducers/application";
 
-/**
- * Custom hook 'useApplicationData': manages the application's state
- */
-
 const useApplicationData = () => {
-  /**
-   * Set useReducer hook with initial state
-   */
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
     interviewers: {},
   });
-
-  /**
-   * Make a connection to the WebSocket server
-   */
-
-  useEffect(() => {}, []);
 
   /**
    * Initializes application data via useEffect hook which runs only once, making calls to 3 different api's
@@ -49,82 +35,52 @@ const useApplicationData = () => {
     });
   }, []);
 
-  // if (state.days.length > 0) console.log("Initial state: ", state);
-
   /**
-   * Helper functions: update the state object via dispatch (useReducer hook)
-   * (1) setDay: updates the day when user clicks on DayListItem
-   * (2) updateSpots: updates the number of spots for a given day when a user books or cancels an interview
+   * Updates the appointments list with the new interview object when either
+   * the 'bookInterview' or 'cancelInterview' functions make an AJAX request
+   * @param {integer} id
+   * @param {object} interview
+   * @returns nothing; updates state via dispatching new appointments and updated number of spots
    */
 
-  const setDay = day => dispatch({ type: SET_DAY, day });
+  const updateAppointments = (id, interview) => {
+    const int = interview ? { ...interview } : null;
+    const appointment = {
+      ...state.appointments[id],
+      interview: int,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    dispatch({
+      type: SET_INTERVIEW,
+      appointments,
+      days: updateSpots(state, appointments),
+    });
+  };
 
   /**
-   * Books an interview when user submits the form
+   * Books & cancels interviews when user submits the form or clicks delete button
    * @param {integer} id the appointment id for the appointment being booked
    * @param {object} interview the interview data
    * @returns an axios put call to update appointments with new interview, then update state, then update spots
    */
 
   const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
     return axios
       .put(`/api/appointments/${id}`, { interview })
-      .then(() => {
-        dispatch({
-          type: SET_INTERVIEW,
-          appointments,
-        });
-      })
-      .then(() => {
-        dispatch({
-          type: SET_DAYS,
-          days: updateSpots(state, appointments),
-        });
-      });
+      .then(() => updateAppointments(id, interview));
   };
+
+  const cancelInterview = id =>
+    axios.delete(`/api/appointments/${id}`).then(() => updateAppointments(id));
 
   /**
-   * Cancels an interview when the user clicks the cancel button
-   * @param {integer} id the appointment id for the appointment being cancelled
-   * @returns an axios delete call to delete the selected interview, then update state, then update spots
+   * Updates the day when user clicks on DayListItem
    */
 
-  const cancelInterview = id => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    return axios
-      .delete(`/api/appointments/${id}`, {
-        interview: appointment,
-      })
-      .then(() => {
-        dispatch({
-          type: SET_INTERVIEW,
-          appointments,
-        });
-      })
-      .then(() => {
-        dispatch({
-          type: SET_DAYS,
-          days: updateSpots(state, appointments),
-        });
-      });
-  };
+  const setDay = day => dispatch({ type: SET_DAY, day });
 
   return {
     state,

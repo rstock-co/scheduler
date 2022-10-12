@@ -1,5 +1,4 @@
 export const SET_DAY = "SET_DAY";
-export const SET_DAYS = "SET_DAYS";
 export const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 export const SET_INTERVIEW = "SET_INTERVIEW";
 
@@ -13,14 +12,17 @@ export const SET_INTERVIEW = "SET_INTERVIEW";
 const reducer = (state, action) => {
   const reducers = {
     SET_DAY: state => ({ ...state, day: action.day }),
-    SET_DAYS: state => ({ ...state, days: action.days }),
     SET_APPLICATION_DATA: state => ({
       ...state,
       days: action.days,
       appointments: action.appointments,
       interviewers: action.interviewers,
     }),
-    SET_INTERVIEW: state => ({ ...state, appointments: action.appointments }),
+    SET_INTERVIEW: state => ({
+      ...state,
+      appointments: action.appointments,
+      days: action.days,
+    }),
     default: "tried to reduce with unsupported action type",
   };
 
