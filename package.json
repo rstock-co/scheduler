@@ -10,8 +10,7 @@
     "normalize.css": "^8.0.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.4.4",
-    "ws": "^8.9.0"
+    "react-scripts": "3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -44,6 +43,7 @@
     "@testing-library/react": "^8.0.7",
     "@testing-library/react-hooks": "^8.0.1",
     "babel-loader": "^8.0.5",
+    "prop-types": "^15.8.1",
     "react-test-renderer": "^16.14.0",
     "sass": "^1.53.0"
   },
