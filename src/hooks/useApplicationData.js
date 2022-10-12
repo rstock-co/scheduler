@@ -73,7 +73,7 @@ const useApplicationData = () => {
     });
   }, []);
 
-  if (state.days.length > 0) console.log("Initial state: ", state);
+  // if (state.days.length > 0) console.log("Initial state: ", state);
 
   /**
    * Helper functions: update the state object via dispatch (useReducer hook)
