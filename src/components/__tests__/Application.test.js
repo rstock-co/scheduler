@@ -14,6 +14,8 @@ import {
   prettyDOM,
 } from "@testing-library/react";
 
+import axios from "axios";
+
 import Application from "../Application";
 
 afterEach(cleanup);
@@ -118,6 +120,44 @@ describe("Application", () => {
     // 7. Wait until the element with the student's and interviewer's name is displayed.
     await waitForElement(() => getByText(appointment, "Richard Stock"));
     expect(getByText(appointment, "Tori Malcolm")).toBeInTheDocument();
+
+    // 8. Check that the DayListItem with the text "Monday" still has the text "1 spot remaining".
+    const day = getAllByTestId(container, "day").find(day =>
+      queryByText(day, "Monday")
+    );
+    expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
+  });
+
+  it("shows the save error when failing to save an appointment", async () => {
+    // Revert to the default mock behaviour after first put request is completed
+    axios.put.mockRejectedValueOnce();
+
+    // 1. Render the Application.
+    const { container } = render(<Application />);
+
+    // 2. Wait until the text "Archie Cohen" is displayed.
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+
+    // 3. find first appointment and click add button
+    const appointments = getAllByTestId(container, "appointment");
+    const appointment = appointments[0];
+    fireEvent.click(getByAltText(appointment, "Add"));
+
+    // 4. Enter student's name and select interviewer
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" },
+    });
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+
+    // 5. Click 'Save' Button
+    fireEvent.click(getByText(appointment, "Save"));
+
+    // 6. After axios call fails, get Error component and confirm it is rendered
+    await waitForElement(() => getByText(container, "Error"));
+    expect(getByText(appointment, "Error Saving")).toBeInTheDocument();
+
+    // 7. Click on Close button to return to main display
+    fireEvent.click(getByAltText(appointment, "Close"));
 
     // 8. Check that the DayListItem with the text "Monday" still has the text "1 spot remaining".
     const day = getAllByTestId(container, "day").find(day =>
