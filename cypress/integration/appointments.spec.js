@@ -27,4 +27,24 @@ describe("Appointments", () => {
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
   });
+
+  it("should edit an interview", () => {
+    // 1. find and click the "Edit" button on the "Archie Cohen" appointment.
+    cy.get("[alt=Edit]").first().click({ force: true });
+
+    // 2. change the student name
+    cy.get("[data-testid=student-name-input]").clear().type("Richard Stock", {
+      delay: 150,
+    });
+
+    // 3. change the selected interviewer
+    cy.get('[alt="Tori Malcolm"]').click();
+
+    // 4. click on the "Save" button
+    cy.contains("Save").click();
+
+    // 5. confirm that Cypress sees the newly booked appointment
+    cy.contains(".appointment__card--show", "Richard Stock");
+    cy.contains(".appointment__card--show", "Tori Malcolm");
+  });
 });
