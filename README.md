@@ -3,12 +3,6 @@
 The [Interview Scheduler](https://63473f8c34a34f0dbb4ccedb--keen-tanuki-b4e906.netlify.app/) is a Single Page App built with React.  It allows a user to view, add, edit, and cancel appointments by entering a student's name and choosing an interviewer.
  
 There are 5 days which can be selected on the sidebar (Monday through Friday), with 5 timeslots for each day.
-
-## Demo
-
-![Overview](/docs/overview.gif)
-
-![Edit](/docs/edit.gif)
  
 ## Extra Features
 All of the stretch goals have been implemented, including:
@@ -16,12 +10,26 @@ All of the stretch goals have been implemented, including:
  NOTE: the web socket feature remains on a feature branch, and isn't merged with the master branch (see `feature/web-sockets`)
   ![Web_Sockets](/docs/web-sockets2.gif)
 - **Client & Server Deployment**: the client has been deployed on `Netlify`, and the database/server to `Heroku`.  Continuous integration management is done by `CircleCI` , with every push to the `master` branch automatically tested in the pipeline before being pushed to the `production` branch.
-<br/>
+
 - **Improved Test Coverage**: test coverage is close to 100% accross all components.
 
 ![Test_Coverage](/docs/test-coverage.png)
 
 - **Reducers**: all of the `useState` hooks have been replaced with `useReducer` hooks inside the `useApplicationData` custom hook.
+
+## Demo
+
+**Overview**
+
+![Overview](/docs/overview.gif)
+
+**Edit Appointment**
+
+![Edit](/docs/edit.gif)
+
+**Errors**
+
+![Error](docs/error-mode.gif)S
  
 ## Custom Hooks
 - `useVisualMode`: manages transitions between render states for appointment components.
