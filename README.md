@@ -80,6 +80,3 @@ npm run cypress
 npm run storybook
 ```
  Storybook can be viewed in your web browser at `http://localhost:9009/`.
-
-
-1. 
