@@ -15,7 +15,7 @@ There are 5 days which can be selected on the sidebar (Monday through Friday), w
 All of the stretch goals have been implemented, including:
 - **Web Sockets**:  for immediate updates across all clients when interviews are booked, edited, or cancelled.  Implements React's `useEffect`, `useReducer` and `useCallback` hooks to listen for the server's socket messages, and then dispatch the data to update state.
  NOTE: the web socket feature remains on a feature branch, and isn't merged with the master branch (see `feature/web-sockets`)
-  ![Web_Sockets](https://github.com/rstock-co/scheduler/blob/master/docs/web-sockets.gif)
+  ![Web_Sockets](https://github.com/rstock-co/scheduler/blob/master/docs/web-sockets2.gif)
 - **Client & Server Deployment**: the client has been deployed on `Netlify`, and the database/server to `Heroku`.  Continuous integration management is done by `CircleCI` , with every push to the `master` branch automatically tested in the pipeline before being pushed to the `production` branch.
 - **Reducers**: all of the `useState` hooks have been replaced with `useReducer` hooks inside the `useApplicationData` custom hook.
  
