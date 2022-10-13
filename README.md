@@ -1,6 +1,6 @@
 # Interview Scheduler
  
-The [Interview Scheduler](https://63473f8c34a34f0dbb4ccedb--keen-tanuki-b4e906.netlify.app/) is a Single Page App built with React.  It allows a user to view, add, edit, and cancel appointments by entering a student's name and choosing an interviewer.
+The Interview Scheduler (view production version [here](https://63473f8c34a34f0dbb4ccedb--keen-tanuki-b4e906.netlify.app/)) is a Single Page App built with React.  It allows a user to view, add, edit, and cancel appointments by entering a student's name and choosing an interviewer.
  
 There are 5 days which can be selected on the sidebar (Monday through Friday), with 5 timeslots for each day.
  
@@ -51,18 +51,35 @@ To run the app server locally:
 1. Clone this repository onto your local device.
 2. Inside the repo root, install dependencies using the `npm install` command.
 3. Start the web server using the `npm start` command. The app will be served at `http://localhost:8000/`.
- To start the database server locally:
+
+To run the database server locally:
  
 1. The data is served by a separate repo called `scheduler-api`, which must be cloned onto your local device. 
 2. Inside the repo root, install dependencies using the `npm install` command.
-3. Start the database server using the `npm start` command.
-4. Start the database test server using the `npm run test:server` command.
-5. Start the database in error mode using the `npm run error` command.
+3. Start the database server using the `npm start` command.  To view in error mode (view the error component) use the `npm run error` command.
+
  
 ## Running Tests
  
-To run the testing frameworks:
-1. Navigate to the `scheduler` repo root folder.
-2. To run the Jest tests, use the `npm test` command.
-3. To run the Cypress tests, use the `npm run cypress` command.
-4. To view UI components in Storybook, use the `npm run storybook` command. Storybook can be viewed in your web browser at `http://localhost:9009/`.
+Navigate to the `scheduler` repo root folder.
+
+### Jest
+ 
+```
+npm test
+```
+### Cypress
+
+```
+npm run cypress
+```
+**NOTE**: for Cypress to work properly, the database must be started in test mode, using the following command: `npm run test:server`
+
+### Storybook
+```
+npm run storybook
+```
+ Storybook can be viewed in your web browser at `http://localhost:9009/`.
+
+
+1. 
