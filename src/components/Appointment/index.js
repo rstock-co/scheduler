@@ -68,7 +68,7 @@ const Appointment = ({
   };
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && interview && (
@@ -107,7 +107,7 @@ const Appointment = ({
       )}
       {mode === ERROR_DELETE && (
         <Error
-          message={"Error Delete"}
+          message={"Error Deleting"}
           onClose={() => {
             back();
             back();
@@ -117,7 +117,7 @@ const Appointment = ({
 
       {mode === ERROR_SAVE && (
         <Error
-          message={"Error Save"}
+          message={"Error Saving"}
           onClose={() => {
             back();
             back();
