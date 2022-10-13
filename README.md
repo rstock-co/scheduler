@@ -1,8 +1,6 @@
 # Interview Scheduler
  
-[View App](https://63473f8c34a34f0dbb4ccedb--keen-tanuki-b4e906.netlify.app/)
- 
-The Interview Scheduler is a single page app built with React.  It allows a user to view, add, edit, and cancel appointments by entering a student's name and choosing an interviewer.
+The [Interview Scheduler](https://63473f8c34a34f0dbb4ccedb--keen-tanuki-b4e906.netlify.app/) is a Single Page App built with React.  It allows a user to view, add, edit, and cancel appointments by entering a student's name and choosing an interviewer.
  
 There are 5 days which can be selected on the sidebar (Monday through Friday), with 5 timeslots for each day.
  
@@ -15,8 +13,15 @@ There are 5 days which can be selected on the sidebar (Monday through Friday), w
 All of the stretch goals have been implemented, including:
 - **Web Sockets**:  for immediate updates across all clients when interviews are booked, edited, or cancelled.  Implements React's `useEffect`, `useReducer` and `useCallback` hooks to listen for the server's socket messages, and then dispatch the data to update state.
  NOTE: the web socket feature remains on a feature branch, and isn't merged with the master branch (see `feature/web-sockets`)
+ <br/>
   ![Web_Sockets](https://github.com/rstock-co/scheduler/blob/master/docs/web-sockets2.gif)
+  <br/>
 - **Client & Server Deployment**: the client has been deployed on `Netlify`, and the database/server to `Heroku`.  Continuous integration management is done by `CircleCI` , with every push to the `master` branch automatically tested in the pipeline before being pushed to the `production` branch.
+<br/>
+- **Improved Test Coverage**: test coverage is close to 100% accross all components.
+<br/>
+![Test_Coverage](https://github.com/rstock-co/scheduler/blob/master/docs/test-coverage.gif)
+<br/>
 - **Reducers**: all of the `useState` hooks have been replaced with `useReducer` hooks inside the `useApplicationData` custom hook.
  
 ## Custom Hooks
